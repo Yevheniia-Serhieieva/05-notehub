@@ -38,26 +38,32 @@ export default function App() {
       <div className={css.app}>
         <header className={css.toolbar}>
           <SearchBox value={search} onSearchChange={setSearch} />
-          {data && data.total_pages > 1 && (
+
+          {data && data.totalPages > 1 && (
             <Pagination
-              pageCount={data.total_pages}
+              pageCount={data.totalPages}
               currentPage={currentPage}
               onPageChange={setCurrentPage}
             />
           )}
+
           {
             <button onClick={openModal} className={css.button}>
               Create note +
             </button>
           }
         </header>
+
         {isLoading && <Loader />}
+
         {isError && <ErrorMessage />}
-        {!isLoading && !isError && data?.results?.length === 0 ? (
+
+        {!isLoading && !isError && data?.notes?.length === 0 ? (
           <p>No notes found.</p>
         ) : (
-          <NoteList notes={data?.results || []} />
+          <NoteList notes={data?.notes || []} />
         )}
+
         {isModalOpen && (
           <Modal onClose={closeModal}>
             <NoteForm onCancel={closeModal} />
