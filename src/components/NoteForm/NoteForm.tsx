@@ -8,12 +8,15 @@ import toast from "react-hot-toast";
 import type { NoteTag } from "../../types/note";
 
 interface NoteFormProps {
+  onCancel: () => void;
+}
+interface NoteFormValues {
   title: string;
   content: string;
   tag: NoteTag;
 }
 
-const initialValues: NoteFormProps = {
+const initialValues: NoteFormValues = {
   title: "",
   content: "",
   tag: "Todo",
@@ -30,18 +33,18 @@ const validationSchema = Yup.object().shape({
     .required("Tag is required"),
 });
 
-export default function NoteForm({ onCancel }: { onCancel: () => void }) {
+export default function NoteForm({ onCancel }: NoteFormProps) {
   const queryClient = useQueryClient();
   const fieldId = useId();
 
   const mutation = useMutation({
-    mutationFn: (values: NoteFormProps) =>
+    mutationFn: (values: NoteFormValues) =>
       createNote(values.title, values.content, values.tag),
   });
 
   const handleSubmit = (
-    values: NoteFormProps,
-    actions: FormikHelpers<NoteFormProps>
+    values: NoteFormValues,
+    actions: FormikHelpers<NoteFormValues>
   ) => {
     mutation.mutate(values, {
       onSuccess: () => {
